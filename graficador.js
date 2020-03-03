@@ -43,8 +43,8 @@ function auto_escala()
             menory = puntos[i].y;
     }
     //2.-ajusto la escala de acuerdo al mayor
-    escalax = cx/(mayorx)*1;//1 para no dejar margen izq y derecho, aqui mayorx=10
-    escalay = cy/(mayory+(-1*menory))*0.5;//0.33 para escalarlo a 1/3 para margen 1/3 de cada lado, aqui mayory=1
+    escalax = cx/(mayorx)*1;//1 para no dejar margen izq y derecho
+    escalay = cy/(mayory+(-1*menory))*0.5;//para escalarlo con margen
     //console.log("mayor: "+mayory);
     //console.log("menor: "+menory);
     //console.log("c: "+cy);
@@ -78,7 +78,7 @@ function recorre_centro()
     cx = 0;
     //centroy -= ((mayory+(-1*menory))*escalay)*0.5;
 }
-//dibuja los ejes------------------------------------------------------------------------------------
+//dibuja los ejes--------------------------------------------------------------
 g2d.stroke();
 
 function malla()
@@ -139,7 +139,7 @@ function malla()
 var puntos = [];
 puntos.push({x: x,y: y});
 
-//grafica coseno-----------------------------------------------------------------------------------
+//grafica coseno---------------------------------------------------------------
 function dibuja(){
 g2d.beginPath();
 g2d.strokeStyle = 'blue';
@@ -162,7 +162,7 @@ for(i in puntos)
 g2d.stroke();
 }
 /*
-//grafica seno-------------------------------------------------------------------------------------
+//grafica seno-----------------------------------------------------------------
 g2d.beginPath();
 g2d.strokeStyle = 'red';
 x=-10;
