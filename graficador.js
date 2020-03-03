@@ -6,39 +6,76 @@ var cx = c.width/2;
 var cy = c.height/2;
 var x;
 var y;
-//eje
-g2d.moveTo(0,cx);
-g2d.lineTo(500,cx);
-//eje
-g2d.moveTo(cx,0);
-g2d.lineTo(cy,500);
+//sea la guia un (x,y) que se incremente a todo lo que se dibuje
+//para así realizar una traslación de la guia con respecto a la grafica
+var gx=0;
+var gy=0;
+var guiax=gx*-1; //para recorrer la guia
+var guiay=gy*1; //para recorrer la guia
+
+var mayorx = -Infinity;
+var mayory = -Infinity;
+var menorx = Infinity;
+var menory = Infinity;
+function dibuja_ejes(){
+    g2d.beginPath();
+    g2d.strokeStyle = 'black';
+    //eje y
+    g2d.moveTo(0,cy+guiay);
+    g2d.lineTo(500,cy+guiay);
+    console.log("guiax: "+guiax);
+    console.log("guiay: "+guiay);
+    //eje x
+    g2d.moveTo(cx+guiax,0);
+    g2d.lineTo(cx+guiax,500);
+    g2d.stroke();
+}
 //origen del plano cartesiano
 var centrox = 250;
 var centroy = 250;
 
-//escala de la grafica
-//var escalax = 20;2
-//var escalay = 40;
+function mover_arriba()
+{
+    guiay-=10;
+    centroy-=10;
+    limpia();
+    dibuja();
+}
 
+function mover_abajo()
+{
+    guiay+=10;
+    centroy+=10;
+    limpia();
+    dibuja();
+}
+
+function mover_izquierda()
+{
+    guiax+=10;
+    centrox+=10;
+    limpia();
+    dibuja();
+}
+
+function mover_derecha()
+{
+    guiax-=10;
+    centrox-=10;
+    limpia();
+    dibuja();
+}
 function auto_escala()
 {
     //1.-busco el mayor de la lista
-    var mayorx = -Infinity;
-    var mayory = -Infinity;
-    var menorx = Infinity;
-    var menory = Infinity;
-
     for(i in puntos)
     {
         if(puntos[i].x > mayorx)
-            mayorx = puntos[i].x;
-        
+            mayorx = puntos[i].x;       
         if(puntos[i].y > mayory)
             mayory = puntos[i].y;
-
         if(puntos[i].x < menorx)
             menorx = puntos[i].x;
-
         if(puntos[i].y < menory)
             menory = puntos[i].y;
     }
@@ -50,33 +87,17 @@ function auto_escala()
     //console.log("c: "+cy);
     //console.log("escala: "+escalay);
     return 0;
-    recorre_centro();
 }
 
 function recorre_centro()
 {
-    //tomo el valor medio del eje y, y el punto medio de x
-    //eso será mi nuevo pseudo-0,0
-    var mayorx = -Infinity;
-    var mayory = -Infinity;
-    var menorx = Infinity;
-    var menory = Infinity;
-    for(i in puntos)
-    {
-        if(puntos[i].x > mayorx)
-            mayorx = puntos[i].x;
-        
-        if(puntos[i].y > mayory)
-            mayory = puntos[i].y;
-
-        if(puntos[i].x < menorx)
-            menorx = puntos[i].x;
-
-        if(puntos[i].y < menory)
-            menory = puntos[i].y;
-    }
-    cx = 0;
-    //centroy -= ((mayory+(-1*menory))*escalay)*0.5;
+    dibuja();
+    var cerox = 0;
+    var ceroy = menory*escalay;
+    guiax+=cerox;
+    centrox+=cerox;
+    guiay+=ceroy;
+    centroy+=ceroy;
 }
 //dibuja los ejes--------------------------------------------------------------
 g2d.stroke();
@@ -109,8 +130,8 @@ function malla()
         if(puntos[i].y<minimox)
         minimox=puntos[i].x.toFixed(0);
     }
-    console.log("max:"+maximox);
-    console.log(minimox);
+    //console.log("max:"+maximox);
+    //console.log(minimox);
     for(z=minimox;z<=maximox;z++)
         g2d.fillText(z,z+z*escalax+centrox,cy+10);
         
@@ -125,8 +146,8 @@ function malla()
         if(puntos[i].y<minimoy)
         minimoy=puntos[i].y.toFixed(0);
     }
-    console.log(maximoy);
-    console.log(minimoy);
+    //console.log(maximoy);
+    //console.log(minimoy);
     for(z=maximoy;z>=minimoy;z--)
     {
         if(z!=0)
@@ -139,11 +160,17 @@ function malla()
 var puntos = [];
 puntos.push({x: x,y: y});
 
+function limpia(){
+    g2d.beginPath();
+    g2d.clearRect(0,0,500,500);
+}
+
 //grafica coseno---------------------------------------------------------------
 function dibuja(){
-g2d.beginPath();
+limpia();
+dibuja_ejes();
 g2d.strokeStyle = 'blue';
-
+g2d.beginPath();
 x=-10;
 C=2;
 y=Math.cos(x)+C;
@@ -161,18 +188,20 @@ for(i in puntos)
 
 g2d.stroke();
 }
-/*
-//grafica seno-----------------------------------------------------------------
-g2d.beginPath();
-g2d.strokeStyle = 'red';
-x=-10;
-y=Math.sin(x);
-g2d.moveTo(centrox+x*escalax,centroy-y*escalay);
-for(x=-10;x<=10;x+=0.1)
-{
-    y=Math.sin(x);
-    g2d.lineTo(centrox+x*escalax,centroy-y*escalay);
-}
-//dibuja los cambios en el canvas
-g2d.stroke();
-*/
+
+document.onkeydown = function(e) {
+    switch (e.keyCode) {
+        case 37:
+            mover_derecha();
+            break;
+        case 38:
+            mover_arriba();
+            break;
+        case 39:
+            mover_izquierda();
+            break;
+        case 40:
+            mover_abajo();
+            break;
+    }
+};
