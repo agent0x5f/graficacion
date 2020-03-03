@@ -45,11 +45,12 @@ function auto_escala()
     //2.-ajusto la escala de acuerdo al mayor
     escalax = cx/(mayorx)*1;//1 para no dejar margen izq y derecho, aqui mayorx=10
     escalay = cy/(mayory+(-1*menory))*0.5;//0.33 para escalarlo a 1/3 para margen 1/3 de cada lado, aqui mayory=1
-    console.log("mayor: "+mayory);
-    console.log("menor: "+menory);
-    console.log("c: "+cy);
-    console.log("escala: "+escalay);
+    //console.log("mayor: "+mayory);
+    //console.log("menor: "+menory);
+    //console.log("c: "+cy);
+    //console.log("escala: "+escalay);
     return 0;
+    recorre_centro();
 }
 
 function recorre_centro()
@@ -77,32 +78,89 @@ function recorre_centro()
     cx = 0;
     //centroy -= ((mayory+(-1*menory))*escalay)*0.5;
 }
-
 //dibuja los ejes------------------------------------------------------------------------------------
 g2d.stroke();
+
+function malla()
+{
+    g2d.beginPath();
+    g2d.strokeStyle = 'rgba(0,0,0,0.3)';
+    for(i in puntos)
+    {
+        g2d.moveTo(i*escalax,0);
+        g2d.lineTo(i*escalax,c.height);
+    }
+    for(i in puntos)
+    {
+        g2d.moveTo(0,i*escalay);
+        g2d.lineTo(c.width,i*escalay);
+    }
+    g2d.font = "12px Arial";
+    g2d.fillText("Escala X-> 1:"+escalax.toFixed(1)+"px",0,480);
+    g2d.fillText("Escala Y-> 1:"+escalay.toFixed(1)+"px",0,490);
+    //numeros en la regla x
+  
+    var maximox=-Infinity;
+    var minimox=Infinity;
+    for(i in puntos)
+    {
+        if(puntos[i].x>maximox)
+        maximox=puntos[i].x.toFixed(0);
+        if(puntos[i].y<minimox)
+        minimox=puntos[i].x.toFixed(0);
+    }
+    console.log("max:"+maximox);
+    console.log(minimox);
+    for(z=minimox;z<=maximox;z++)
+        g2d.fillText(z,z+z*escalax+centrox,cy+10);
+        
+
+    //numeros en la regla y
+    var maximoy=-Infinity;
+    var minimoy=Infinity;
+    for(i in puntos)
+    {
+        if(puntos[i].y>maximoy)
+        maximoy=puntos[i].y.toFixed(0);
+        if(puntos[i].y<minimoy)
+        minimoy=puntos[i].y.toFixed(0);
+    }
+    console.log(maximoy);
+    console.log(minimoy);
+    for(z=maximoy;z>=minimoy;z--)
+    {
+        if(z!=0)
+        g2d.fillText(z,cx,z-z*escalay+centroy);
+    }
+
+   g2d.stroke();
+}
 
 var puntos = [];
 puntos.push({x: x,y: y});
 
 //grafica coseno-----------------------------------------------------------------------------------
+function dibuja(){
 g2d.beginPath();
 g2d.strokeStyle = 'blue';
 
 x=-10;
-C=3;
+C=2;
 y=Math.cos(x)+C;
-for(x=-10;x<=10;x+=0.1)
+for(x=-5;x<=5;x+=0.1)
 {
     y=Math.cos(x)+C;
     puntos.push({x: x,y: y});
 }
+
 auto_escala();
-recorre_centro();
+
 g2d.moveTo(centrox+puntos[0].x*escalax,centroy-puntos[0].y*escalay);    
 for(i in puntos)
     g2d.lineTo(puntos[i].x*escalax+centrox,centroy-escalay*puntos[i].y);
 
 g2d.stroke();
+}
 /*
 //grafica seno-------------------------------------------------------------------------------------
 g2d.beginPath();
