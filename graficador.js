@@ -4,6 +4,7 @@ g2d.strokeStyle = 'black';
 //centro de mi canvas
 var cx = c.width/2;
 var cy = c.height/2;
+var dibujar_malla=true;
 var x;
 var y;
 //sea la guia un (x,y) que se incremente a todo lo que se dibuje
@@ -99,8 +100,11 @@ function recorre_centro()
     guiay+=ceroy;
     centroy+=ceroy;
 }
-//dibuja los ejes--------------------------------------------------------------
-g2d.stroke();
+
+function toggle_malla(){
+    dibujar_malla = !dibujar_malla;
+    dibuja();
+}
 
 function malla()
 {
@@ -134,7 +138,6 @@ function malla()
     //console.log(minimox);
     for(z=minimox;z<=maximox;z++)
         g2d.fillText(z,z+z*escalax+centrox,cy+10);
-        
 
     //numeros en la regla y
     var maximoy=-Infinity;
@@ -159,18 +162,6 @@ function malla()
 
 var puntos = [];
 puntos.push({x: x,y: y});
-
-function limpia(){
-    g2d.beginPath();
-    g2d.clearRect(0,0,500,500);
-}
-
-//grafica coseno---------------------------------------------------------------
-function dibuja(){
-limpia();
-dibuja_ejes();
-g2d.strokeStyle = 'blue';
-g2d.beginPath();
 x=-10;
 C=2;
 y=Math.cos(x)+C;
@@ -180,13 +171,33 @@ for(x=-5;x<=5;x+=0.1)
     puntos.push({x: x,y: y});
 }
 
+function limpia(){
+    g2d.beginPath();
+    g2d.clearRect(0,0,500,500);
+    g2d.stroke();
+}
+
+//grafica coseno---------------------------------------------------------------
+function dibuja(){
+limpia();
+dibuja_ejes();
 auto_escala();
+g2d.beginPath(); 
+g2d.strokeStyle = 'blue';
 
-g2d.moveTo(centrox+puntos[0].x*escalax,centroy-puntos[0].y*escalay);    
 for(i in puntos)
+{
+    //console.log("largo: "+ puntos.length);
+    if(i < puntos.length)
     g2d.lineTo(puntos[i].x*escalax+centrox,centroy-escalay*puntos[i].y);
-
+    else
+    g2d.moveTo(250,250);
+}
 g2d.stroke();
+
+
+if(dibujar_malla==true)
+    malla();
 }
 
 document.onkeydown = function(e) {
