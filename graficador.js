@@ -1,3 +1,15 @@
+//zona de la formula a graficar
+var puntos = [];
+puntos.push({x: x,y: y});
+//x=-15;
+C=2;
+//y=Math.cos(x)+C;
+for(x=1;x<=6;x+=0.1)
+{
+    y=Math.cos(x)+C;
+    puntos.push({x: x,y: y});
+}
+
 var c = document.getElementById("myCanvas");
 var g2d = c.getContext("2d");
 g2d.strokeStyle = 'black';
@@ -92,13 +104,24 @@ function auto_escala()
 
 function recorre_centro()
 {
-    dibuja();
-    var cerox = 0;
+    var cerox = menorx*escalax;
     var ceroy = menory*escalay;
-    guiax+=cerox;
-    centrox+=cerox;
-    guiay+=ceroy;
-    centroy+=ceroy;
+
+    //recorre en eje y hacia abajo
+    while(menory>0 && centroy<420)
+    {
+      guiay+=ceroy;
+      centroy+=ceroy;
+      dibuja();
+    }
+    
+    //recorre en eje x hacia izquierda
+    while(menorx > 0 && centrox > 120)
+    {
+      guiax-=cerox;
+      centrox-=cerox;
+      dibuja();
+    }
 }
 
 function toggle_malla(){
@@ -124,19 +147,14 @@ function malla()
     g2d.fillText("Escala X-> 1:"+escalax.toFixed(1)+"px",0,480);
     g2d.fillText("Escala Y-> 1:"+escalay.toFixed(1)+"px",0,490);
     //numeros en la regla x 
-    var maximox=-Infinity;
-    var minimox=Infinity;
-    for(i in puntos)
-    {
-        if(puntos[i].x>maximox)
-        maximox=puntos[i].x.toFixed(0);
-        if(puntos[i].y<minimox)
-        minimox=puntos[i].x.toFixed(0);
-    }
-    //console.log("max:"+maximox);
-    //console.log(minimox);
+    //solo redondeo por la escala en las orillas!
+    var maximox=Math.round(puntos[puntos.length-1].x);
+    var minimox=Math.round(puntos[1].x);
+    
+    console.log("max: "+maximox);
+    console.log("min: "+minimox);
     for(z=minimox;z<=maximox;z++)
-        g2d.fillText(z,z+z*escalax+centrox,cy+10+guiay);
+        g2d.fillText(z,z*escalax+centrox,cy+10+guiay);
 
     //numeros en la regla y
     var maximoy=-Infinity;
@@ -157,17 +175,6 @@ function malla()
     }
 
    g2d.stroke();
-}
-
-var puntos = [];
-puntos.push({x: x,y: y});
-x=-10;
-C=2;
-y=Math.cos(x)+C;
-for(x=-5;x<=5;x+=0.1)
-{
-    y=Math.cos(x)+C;
-    puntos.push({x: x,y: y});
 }
 
 function limpia(){
