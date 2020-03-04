@@ -123,8 +123,7 @@ function malla()
     g2d.font = "12px Arial";
     g2d.fillText("Escala X-> 1:"+escalax.toFixed(1)+"px",0,480);
     g2d.fillText("Escala Y-> 1:"+escalay.toFixed(1)+"px",0,490);
-    //numeros en la regla x
-  
+    //numeros en la regla x 
     var maximox=-Infinity;
     var minimox=Infinity;
     for(i in puntos)
@@ -137,7 +136,7 @@ function malla()
     //console.log("max:"+maximox);
     //console.log(minimox);
     for(z=minimox;z<=maximox;z++)
-        g2d.fillText(z,z+z*escalax+centrox,cy+10);
+        g2d.fillText(z,z+z*escalax+centrox,cy+10+guiay);
 
     //numeros en la regla y
     var maximoy=-Infinity;
@@ -154,7 +153,7 @@ function malla()
     for(z=maximoy;z>=minimoy;z--)
     {
         if(z!=0)
-        g2d.fillText(z,cx,z-z*escalay+centroy);
+        g2d.fillText(z,cx+guiax,z-z*escalay+centroy);
     }
 
    g2d.stroke();
