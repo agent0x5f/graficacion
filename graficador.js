@@ -1,224 +1,55 @@
-//zona de la formula a graficar
-var puntos = [];
-puntos.push({x: x,y: y});
-//x=-15;
-C=2;
-//y=Math.cos(x)+C;
-for(x=1;x<=6;x+=0.1)
-{
-    y=Math.cos(x)+C;
-    puntos.push({x: x,y: y});
+document.write("<script type='text/javascript' src='grafica.js'></script>");
+document.write("<script type='text/javascript' src='serie.js'></script>");
+document.write("<script type='text/javascript' src='eje.js'></script>");
+
+
+class Graficador{
+
+	constructor(canvas) {
+		this.canvas = canvas; //document.getElementById(canvas);
+		this.g2d = this.canvas.getContext("2d");
+		const { width, height } = this.canvas.getBoundingClientRect();
+		this.width = width;
+		this.height = height;
+		this.maxX = width - 2;
+		this.maxY = height - 2;
+		this.origX = this.maxX / 2;
+		this.origY = this.maxY / 2;
+		this.escX = 10;
+		this.escY = 10;
+		this.autoEscala = true;
+		this.graficas = [];
+	}
+	
+	
+	addGrafica(x, y, width, height, nombreEjeX, nombreEjeY) {
+		var grafica = new Grafica(x, y, width, height, nombreEjeX, nombreEjeY);
+		this.graficas.push(grafica);
+		return grafica;
+	}
+
+	
+	dibuja() {
+		var inicio = Date.now();
+
+		this.borra();
+		for (let i in this.graficas)
+			this.graficas[i].dibuja(this.g2d);
+		var tiempo = Date.now() - inicio;
+
+
+		this.g2d.fillStyle = "black";
+		this.g2d.font = "13px Arial";
+		this.g2d.textAlign = "end";
+		this.g2d.textBaseline = "hanging";
+		this.g2d.fillText(tiempo + " ms", this.maxX, 0);
+	}
+
+
+	borra(){
+		this.g2d.clearRect(0, 0, this.maxX, this.maxY);
+	}
+
+
 }
 
-var c = document.getElementById("myCanvas");
-var g2d = c.getContext("2d");
-g2d.strokeStyle = 'black';
-//centro de mi canvas
-var cx = c.width/2;
-var cy = c.height/2;
-var dibujar_malla=true;
-var x;
-var y;
-//sea la guia un (x,y) que se incremente a todo lo que se dibuje
-//para así realizar una traslación de la guia con respecto a la grafica
-var gx=0;
-var gy=0;
-var guiax=gx*-1; //para recorrer la guia
-var guiay=gy*1; //para recorrer la guia
-
-var mayorx = -Infinity;
-var mayory = -Infinity;
-var menorx = Infinity;
-var menory = Infinity;
-function dibuja_ejes(){
-    g2d.beginPath();
-    g2d.strokeStyle = 'black';
-    //eje y
-    g2d.moveTo(0,cy+guiay);
-    g2d.lineTo(500,cy+guiay);
-    console.log("guiax: "+guiax);
-    console.log("guiay: "+guiay);
-    //eje x
-    g2d.moveTo(cx+guiax,0);
-    g2d.lineTo(cx+guiax,500);
-    g2d.stroke();
-}
-//origen del plano cartesiano
-var centrox = 250;
-var centroy = 250;
-
-function mover_arriba()
-{
-    guiay-=10;
-    centroy-=10;
-    limpia();
-    dibuja();
-}
-
-function mover_abajo()
-{
-    guiay+=10;
-    centroy+=10;
-    limpia();
-    dibuja();
-}
-
-function mover_izquierda()
-{
-    guiax+=10;
-    centrox+=10;
-    limpia();
-    dibuja();
-}
-
-function mover_derecha()
-{
-    guiax-=10;
-    centrox-=10;
-    limpia();
-    dibuja();
-}
-function auto_escala()
-{
-    //1.-busco el mayor de la lista
-    for(i in puntos)
-    {
-        if(puntos[i].x > mayorx)
-            mayorx = puntos[i].x;       
-        if(puntos[i].y > mayory)
-            mayory = puntos[i].y;
-        if(puntos[i].x < menorx)
-            menorx = puntos[i].x;
-        if(puntos[i].y < menory)
-            menory = puntos[i].y;
-    }
-    //2.-ajusto la escala de acuerdo al mayor
-    escalax = cx/(mayorx)*1;//1 para no dejar margen izq y derecho
-    escalay = cy/(mayory+(-1*menory))*0.5;//para escalarlo con margen
-    //console.log("mayor: "+mayory);
-    //console.log("menor: "+menory);
-    //console.log("c: "+cy);
-    //console.log("escala: "+escalay);
-    return 0;
-}
-
-function recorre_centro()
-{
-    var cerox = menorx*escalax;
-    var ceroy = menory*escalay;
-
-    //recorre en eje y hacia abajo
-    while(menory>0 && centroy<420)
-    {
-      guiay+=ceroy;
-      centroy+=ceroy;
-      dibuja();
-    }
-    
-    //recorre en eje x hacia izquierda
-    while(menorx > 0 && centrox > 120)
-    {
-      guiax-=cerox;
-      centrox-=cerox;
-      dibuja();
-    }
-}
-
-function toggle_malla(){
-    dibujar_malla = !dibujar_malla;
-    dibuja();
-}
-
-function malla()
-{
-    g2d.beginPath();
-    g2d.strokeStyle = 'rgba(0,0,0,0.3)';
-    for(i in puntos)
-    {
-        g2d.moveTo(i*escalax,0);
-        g2d.lineTo(i*escalax,c.height);
-    }
-    for(i in puntos)
-    {
-        g2d.moveTo(0,i*escalay);
-        g2d.lineTo(c.width,i*escalay);
-    }
-    g2d.font = "12px Arial";
-    g2d.fillText("Escala X-> 1:"+escalax.toFixed(1)+"px",0,480);
-    g2d.fillText("Escala Y-> 1:"+escalay.toFixed(1)+"px",0,490);
-    //numeros en la regla x 
-    //solo redondeo por la escala en las orillas!
-    var maximox=Math.round(puntos[puntos.length-1].x);
-    var minimox=Math.round(puntos[1].x);
-    
-    console.log("max: "+maximox);
-    console.log("min: "+minimox);
-    for(z=minimox;z<=maximox;z++)
-        g2d.fillText(z,z*escalax+centrox,cy+10+guiay);
-
-    //numeros en la regla y
-    var maximoy=-Infinity;
-    var minimoy=Infinity;
-    for(i in puntos)
-    {
-        if(puntos[i].y>maximoy)
-        maximoy=puntos[i].y.toFixed(0);
-        if(puntos[i].y<minimoy)
-        minimoy=puntos[i].y.toFixed(0);
-    }
-    //console.log(maximoy);
-    //console.log(minimoy);
-    for(z=maximoy;z>=minimoy;z--)
-    {
-        if(z!=0)
-        g2d.fillText(z,cx+guiax,z-z*escalay+centroy);
-    }
-
-   g2d.stroke();
-}
-
-function limpia(){
-    g2d.beginPath();
-    g2d.clearRect(0,0,500,500);
-    g2d.stroke();
-}
-
-//grafica coseno---------------------------------------------------------------
-function dibuja(){
-limpia();
-dibuja_ejes();
-auto_escala();
-g2d.beginPath(); 
-g2d.strokeStyle = 'blue';
-
-for(i in puntos)
-{
-    //console.log("largo: "+ puntos.length);
-    if(i < puntos.length)
-    g2d.lineTo(puntos[i].x*escalax+centrox,centroy-escalay*puntos[i].y);
-    else
-    g2d.moveTo(250,250);
-}
-g2d.stroke();
-
-
-if(dibujar_malla==true)
-    malla();
-}
-
-document.onkeydown = function(e) {
-    switch (e.keyCode) {
-        case 37:
-            mover_derecha();
-            break;
-        case 38:
-            mover_arriba();
-            break;
-        case 39:
-            mover_izquierda();
-            break;
-        case 40:
-            mover_abajo();
-            break;
-    }
-};
