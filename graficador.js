@@ -2,7 +2,12 @@ document.write("<script type='text/javascript' src='grafica.js'></script>");
 document.write("<script type='text/javascript' src='serie.js'></script>");
 document.write("<script type='text/javascript' src='eje.js'></script>");
 
-
+//En general, lo que tienes que hacer es: avanzarle todo lo que puedas a la 
+//librería de graficación y crear una pequeña aplicación web que haga uso de la 
+//librería, que contenga varias gráficas, con diferentes datos. Los datos pueden 
+//estar en arerglos dentr de la aplicación, o en archivos, o en una base de datos 
+//(donde tu prefieras).
+ 
 class Graficador{
 
 	constructor(canvas) {
