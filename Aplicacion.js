@@ -13,24 +13,16 @@ var g = new Graficador(canvas);
 
 var graf1 = g.addGrafica(80, 80, 300, 100);
 graf1.addSerie("Serie 1", puntos1);
-
-
 var graf2 = g.addGrafica(470, 80, 150, 150, "Angulo (radianes)", "Altura (milimetros)");
 var serie1 = graf2.addSerie("Serie 2", puntos2);
 var serie2 = graf2.addSerie("Serie 3", puntos3);
-
-
 var graf3 = g.addGrafica(80, 280, 300, 200, "pH", "Voltaje");
 var ejeX = graf3.addEjeX("Presión (psi)");
 var ejeY = graf3.addEjeY("Temperatura");
 var serie3 = graf3.addSerie("Serie 4", puntos1, 0, 0);
 var serie4 = graf3.addSerie("Serie 5", puntos3, 0, 1);
 
-
 g.dibuja();
-
-
-
 
 /**************************************************************/
 
@@ -57,21 +49,11 @@ function dibujar() {
 	g.dibuja();
 }
 
-
-function toggleAutoEscala() {
-}
-
-
-function recorreCentro() {
-}
-
-
 function reset() {
 	serie3.datos = [];
 	cargaDatos1(serie3.datos);
 	dibujar();
 }
-
 /**************************************************************/
 
 function mover_arriba() {	
