@@ -11,7 +11,7 @@ cargaDatos2(puntos3);
 var g = new Graficador(canvas);
 
 
-var graf1 = g.addGrafica(80, 80, 300, 100);
+var graf1 = g.addGrafica(80, 80, 300, 100,"X","Y","HOLA");
 graf1.addSerie("Serie 1", puntos1);
 var graf2 = g.addGrafica(470, 80, 150, 150, "Angulo (radianes)", "Altura (milimetros)");
 var serie1 = graf2.addSerie("Serie 2", puntos2);
@@ -54,7 +54,7 @@ function reset() {
 	cargaDatos1(serie3.datos);
 	dibujar();
 }
-/**************************************************************/
+/************Controles visibles al usuario***********/
 
 function mover_arriba() {	
 	for (i in serie3.datos)

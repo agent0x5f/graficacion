@@ -1,6 +1,6 @@
 class Grafica {
 
-	constructor(x, y, width, height, nombreEjeX, nombreEjeY) {
+	constructor(x, y, width, height, nombreEjeX, nombreEjeY, titulo) {
 		this.x0 = x;
 		this.y0 = y;
 		this.width = width;
@@ -20,6 +20,8 @@ class Grafica {
 		this.colorFondo = "#A4F2F0";
 		this.posicionPrimerEje = 5;
 		this.espacioEntreEjes = 35;
+		if (titulo != undefined) this.titulo= titulo;
+		else this.titulo = "Titulo";
 	}
 
 
@@ -124,6 +126,8 @@ class Grafica {
 			this.ejesY[i].dibujaEjeY(this, pos, g2d);
 			pos += this.espacioEntreEjes;
 		}
+		//Dibuja el titulo de la grafica
+		g2d.fillText(this.titulo,this.x0,this.y0);
 
 		g2d.save();	//Guarda el estado del 2DContext antes del recorte (clip)
 		//Limita el área de dibujo de la grafica

@@ -24,11 +24,12 @@ class Graficador{
 		this.escY = 10;
 		this.autoEscala = true;
 		this.graficas = [];
+		this.titulo = "";
 	}
 	
 	
-	addGrafica(x, y, width, height, nombreEjeX, nombreEjeY) {
-		var grafica = new Grafica(x, y, width, height, nombreEjeX, nombreEjeY);
+	addGrafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo) {
+		var grafica = new Grafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo);
 		this.graficas.push(grafica);
 		return grafica;
 	}
