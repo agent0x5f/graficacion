@@ -1,6 +1,6 @@
 class Grafica {
 
-	constructor(x, y, width, height, nombreEjeX, nombreEjeY, titulo) {
+	constructor(x, y, width, height, nombreEjeX, nombreEjeY, titulo, fondo_g) {
 		this.x0 = x;
 		this.y0 = y;
 		this.width = width;
@@ -17,7 +17,7 @@ class Grafica {
 		this.gridX = 0;
 		this.gridY = 0;
 		this.colorBorde = "#505050";
-		this.colorFondo = "#A4F2F0";
+		this.colorFondo = fondo_g;
 		this.posicionPrimerEje = 5;
 		this.espacioEntreEjes = 35;
 		if (titulo != undefined) this.titulo= titulo;
@@ -25,10 +25,10 @@ class Grafica {
 	}
 
 
-	addSerie(nombre, datos, ejeX, ejeY) {
+	addSerie(nombre, datos, color, ejeX, ejeY) {
 		if (ejeX == undefined) var ejeX = 0;
 		if (ejeY == undefined) var ejeY = 0;
-		var serie = new Serie(nombre, datos, ejeX, ejeY);
+		var serie = new Serie(nombre, datos, ejeX, ejeY, color);
 		this.series.push(serie);
 		if (this.ejesX.length == 0)
 			this.ejesX.push(new Eje("Eje X"));
