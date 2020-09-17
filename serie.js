@@ -1,6 +1,6 @@
 class Serie {
 
-	constructor(nombre, datos, ejeX, ejeY, color) {
+	constructor(nombre, datos, ejeX, ejeY, color, stilo) {
 		this.nombre = nombre;
 		this.datos = datos;
 		this.ejeX = ejeX;
@@ -10,6 +10,7 @@ class Serie {
 		this.xmax = 0;
 		this.ymax = 0;
 		this.color = color;
+		this.stilo = stilo;
 	}
 
 	//Busca los vales máximos y mínimos en X y Y de una serie

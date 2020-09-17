@@ -1,6 +1,6 @@
 class Eje {
 
-	constructor(nombre) {
+	constructor(nombre, stilo) {
 		this.nombre = nombre;
 		this.min = -1;
 		this.max = 1;
@@ -13,6 +13,16 @@ class Eje {
 		this.div = 0;
 		this.nSubDiv = 5;
 		this.subDiv = 0;
+		if (stilo != undefined) 
+		{
+			this.colorTitulo = stilo.pintura;
+			this.fuente = stilo.tipo + " " + stilo.fuente;
+		}
+		else 
+		{
+			this.pintura = "Black";
+			this.fuente= "12pt Arial";
+		}
 	}
 
 	resetMinMax() {
@@ -119,9 +129,7 @@ class Eje {
 	}
 
 
-
-
-	dibujaEjeX(g, pos, g2d) {
+	dibujaEjeX(g, pos, g2d, stilo) {
 		this.x0 = g.x0;
 		this.y0 = g.y1 + pos;
 		this.width = g.width;
@@ -131,17 +139,19 @@ class Eje {
 
 		g2d.beginPath();
 		g2d.strokeStyle = "black";
-		g2d.fillStyle = "black";
+		g2d.fillStyle = stilo.pintura;
 		g2d.moveTo(g.x0, g.y1 + pos);
 		g2d.lineTo(g.x1, g.y1 + pos);
 		//g2d.rect(this.x0, this.y0, this.width, this.height);
 
-		g2d.font = "13px Arial";
+		g2d.font = stilo.fuente;
 		g2d.textAlign = "center";
 		g2d.textBaseline = "hanging";
 		g2d.fillText(this.nombre, (g.x0 + g.x1) / 2, g.y1 + 17 + pos);
-
+		g2d.restore;
+		
 		g2d.font = "10px Arial";
+		g2d.fillStyle = "black";
 
 		let inferior = this.min;
 		let superior = this.max;
@@ -173,7 +183,7 @@ class Eje {
 	}
 
 
-	dibujaEjeY(g, pos, g2d) {
+	dibujaEjeY(g, pos, g2d, stilo) {
 		this.x1 = g.x0 - pos;
 		this.y0 = g.y0;
 		this.width = g.espacioEntreEjes;
@@ -183,12 +193,12 @@ class Eje {
 
 		g2d.beginPath();
 		g2d.strokeStyle = "black";
-		g2d.fillStyle = "black";
+		g2d.fillStyle = stilo.pintura;
 		g2d.moveTo(g.x0 - pos, g.y0);
 		g2d.lineTo(g.x0 - pos, g.y1);
 		//g2d.rect(this.x0, this.y0, this.width, this.height);
 
-		g2d.font = "13px Arial";
+		g2d.font = stilo.fuente;
 		g2d.textAlign = "center";
 		g2d.textBaseline = "bottom";
 		g2d.save();
@@ -198,6 +208,7 @@ class Eje {
 		g2d.restore();
 
 		g2d.font = "10px Arial";
+		g2d.fillStyle = "black";
 
 		let inferior = this.min;
 		let superior = this.max;

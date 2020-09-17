@@ -1,6 +1,6 @@
 class Grafica {
 
-	constructor(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, fondo_g) {
+	constructor(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, stilo, fondo_g) {
 		this.x0 = x;
 		this.y0 = y;
 		this.width = width;
@@ -10,9 +10,9 @@ class Grafica {
 		this.series = [];
 		this.ejesX = [];
 		this.ejesY = [];
-		if (nombreEjeX != undefined) this.ejesX.push(new Eje(nombreEjeX));
+		if (nombreEjeX != undefined) this.ejesX.push(new Eje(nombreEjeX, stilo));
 		else this.ejesX.push(new Eje("Eje X"));
-		if (nombreEjeY !== undefined) this.ejesY.push(new Eje(nombreEjeY));
+		if (nombreEjeY !== undefined) this.ejesY.push(new Eje(nombreEjeY, stilo));
 		else this.ejesY.push(new Eje("Eje Y"));
 		this.gridX = 0;
 		this.gridY = 0;
@@ -28,18 +28,27 @@ class Grafica {
 		else this.colorTitulo = "Black";
 		if (estilo_titulo != undefined) this.fuente = estilo_titulo.tipo + " " + estilo_titulo.fuente;
 		else this.fuente = "12pt Arial";
+
+		if (stilo == undefined) 
+		{
+			this.fuente2 = "12pt Arial";
+			this.color2 = "Black";
+			this.stilo = new estilo(this.fuente2, this.color2, "italic");
+		}
+		else
+		this.stilo=stilo;
 	}
 
 
-	addSerie(nombre, datos, color, ejeX, ejeY) {
+	addSerie(nombre, datos, color, ejeX, ejeY, stilo) {
 		if (ejeX == undefined) var ejeX = 0;
 		if (ejeY == undefined) var ejeY = 0;
-		var serie = new Serie(nombre, datos, ejeX, ejeY, color);
+		var serie = new Serie(nombre, datos, ejeX, ejeY, color, stilo);
 		this.series.push(serie);
 		if (this.ejesX.length == 0)
-			this.ejesX.push(new Eje("Eje X"));
+			this.ejesX.push(new Eje("Eje X", stilo));
 		if (this.ejesY.length == 0)
-			this.ejesY.push(new Eje("Eje Y"));
+			this.ejesY.push(new Eje("Eje Y", stilo));
 		return serie;
 	}
 
@@ -121,14 +130,14 @@ class Grafica {
 		//Dibuja ejes X
 		var pos = this.posicionPrimerEje;
 		for (let i in this.ejesX) {
-			this.ejesX[i].dibujaEjeX(this, pos, g2d);
+			this.ejesX[i].dibujaEjeX(this, pos, g2d, this.stilo);
 			pos += this.espacioEntreEjes;
 		}
 
 		//Dibuja ejes Y
 		pos = this.posicionPrimerEje;
 		for (let i in this.ejesY) {
-			this.ejesY[i].dibujaEjeY(this, pos, g2d);
+			this.ejesY[i].dibujaEjeY(this, pos, g2d, this.stilo);
 			pos += this.espacioEntreEjes;
 		}
 		//Dibuja el titulo de la grafica

@@ -29,11 +29,11 @@ class Graficador{
 		this.fondo = "#b3d1ff";
 	}
 	
-	addGrafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, fondo_g) {
+	addGrafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, estilo_legenda, fondo_g) {
 		this.contador_graficas +=1;
 		console.log(this.contador_graficas);
 
-		var grafica = new Grafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, fondo_g);
+		var grafica = new Grafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, estilo_legenda, fondo_g);
 		this.graficas.push(grafica);
 		return grafica;
 	}
