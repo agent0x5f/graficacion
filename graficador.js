@@ -1,7 +1,7 @@
 document.write("<script type='text/javascript' src='grafica.js'></script>");
 document.write("<script type='text/javascript' src='serie.js'></script>");
 document.write("<script type='text/javascript' src='eje.js'></script>");
-
+document.write("<script type='text/javascript' src='estilo.js'></script>");
 //En general, lo que tienes que hacer es: avanzarle todo lo que puedas a la 
 //librería de graficación y crear una pequeña aplicación web que haga uso de la 
 //librería, que contenga varias gráficas, con diferentes datos. Los datos pueden 
@@ -29,11 +29,11 @@ class Graficador{
 		this.fondo = "#b3d1ff";
 	}
 	
-	addGrafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo, fondo_g) {
+	addGrafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, fondo_g) {
 		this.contador_graficas +=1;
 		console.log(this.contador_graficas);
 
-		var grafica = new Grafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo, fondo_g);
+		var grafica = new Grafica(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, fondo_g);
 		this.graficas.push(grafica);
 		return grafica;
 	}

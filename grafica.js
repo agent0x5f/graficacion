@@ -1,6 +1,6 @@
 class Grafica {
 
-	constructor(x, y, width, height, nombreEjeX, nombreEjeY, titulo, fondo_g) {
+	constructor(x, y, width, height, nombreEjeX, nombreEjeY, titulo, estilo_titulo, fondo_g) {
 		this.x0 = x;
 		this.y0 = y;
 		this.width = width;
@@ -17,11 +17,17 @@ class Grafica {
 		this.gridX = 0;
 		this.gridY = 0;
 		this.colorBorde = "#505050";
-		this.colorFondo = fondo_g;
+		if(fondo_g != undefined) this.colorFondo = fondo_g;
+		else this.colorFondo = "White";
 		this.posicionPrimerEje = 5;
 		this.espacioEntreEjes = 35;
 		if (titulo != undefined) this.titulo= titulo;
 		else this.titulo = "Titulo";
+		//solo revisa si existe el objeto, mas no si esta completo este.
+		if (estilo_titulo != undefined) this.colorTitulo = estilo_titulo.pintura;
+		else this.colorTitulo = "Black";
+		if (estilo_titulo != undefined) this.fuente = estilo_titulo.tipo + " " + estilo_titulo.fuente;
+		else this.fuente = "12pt Arial";
 	}
 
 
@@ -104,7 +110,6 @@ class Grafica {
 	dibuja(g2d) {
 		this.autoescala();
 		this.dibujaFondo(g2d);
-
 		//Dibuja grid X
 		if (this.gridX != -1)
 			this.ejesX[this.gridX].dibujaGridX(this, g2d);
@@ -127,13 +132,17 @@ class Grafica {
 			pos += this.espacioEntreEjes;
 		}
 		//Dibuja el titulo de la grafica
+		g2d.beginPath();
+		g2d.fillStyle = this.colorTitulo;
+        g2d.font = this.fuente;
 		g2d.fillText(this.titulo,this.x0,this.y0);
-
+		g2d.stroke();
 		g2d.save();	//Guarda el estado del 2DContext antes del recorte (clip)
 		//Limita el área de dibujo de la grafica
 		g2d.rect(this.x0, this.y0, this.width, this.height);
 		g2d.clip();
 
+		
 		//Dibuja las series
 		for (let i in this.series) {
 			let serie = this.series[i];
